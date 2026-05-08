@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
@@ -24,13 +23,11 @@ router.post("/register", async (req, res) => {
 
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         const user = await User.create({
 
             fullName,
             email,
-            password: hashedPassword
+            password
 
         });
 
@@ -66,10 +63,7 @@ router.post("/login", async (req, res) => {
 
         }
 
-        const isMatch = await bcrypt.compare(
-            password,
-            user.password
-        );
+        const isMatch = await user.comparePassword(password);
 
         if (!isMatch) {
 
@@ -114,6 +108,5 @@ router.post("/login", async (req, res) => {
     }
 
 });
-
 
 module.exports = router;
