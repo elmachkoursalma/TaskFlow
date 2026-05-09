@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authMiddleware = require('./middleware/authMiddleware');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
@@ -19,7 +20,14 @@ mongoose.connect(process.env.MONGO_URI)
 app.get('/', (req, res) => {
   res.json({ message: 'TaskFlow API fonctionne ✅' });
 });
+app.get('/api/protected', authMiddleware, (req, res) => {
 
+  res.json({
+    message: 'Protected route access granted',
+    user: req.user
+  });
+
+});
 app.listen(process.env.PORT, () => {
   console.log(`Serveur démarré sur le port ${process.env.PORT}`);
 });
