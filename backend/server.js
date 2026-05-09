@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authMiddleware = require('./middleware/authMiddleware');
+const projectRoutes = require('./routes/projects');
+
+
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
@@ -26,6 +29,8 @@ app.get('/api/protected', authMiddleware, (req, res) => {
     message: 'Protected route access granted',
     user: req.user
   });
+  // Ajouter après les routes auth
+app.use('/api/projects', projectRoutes);
 
 });
 app.listen(process.env.PORT, () => {
