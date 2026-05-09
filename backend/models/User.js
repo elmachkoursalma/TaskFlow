@@ -23,15 +23,13 @@ const userSchema = new mongoose.Schema({
 
 
 // Hachage du mot de passe avant sauvegarde
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
 
     if (!this.isModified('password')) {
-        return next();
+        return;
     }
 
     this.password = await bcrypt.hash(this.password, 10);
-
-    next();
 
 });
 
