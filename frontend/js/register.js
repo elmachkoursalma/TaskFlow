@@ -43,8 +43,10 @@ registerForm.addEventListener("submit", async (e) => {
 
         console.error(error);
 
-        alert("Registration failed");
+      alert("Registration failed");
+
+}
 
     }
 
-});
+);
