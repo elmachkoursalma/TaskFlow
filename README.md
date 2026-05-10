@@ -4,7 +4,7 @@ TaskFlow est une application web fullstack permettant la gestion de projets coll
 
 | Membre | Fonctionnalités (Tasks) | Branches Git |
 | :--- | :--- | :--- |
-| **Imane El Khamal** | **F1:** Authentification <br> **F6:** Filtrage, recherche et pagination | `feature/authentification` <br> `feature/filtrage` |
+| **Iman El Khamal** | **F1:** Authentification <br> **F6:** Filtrage, recherche et pagination | `feature/authentification` <br> `feature/filtrage` |
 | **Salma El Machkour** | **F2:** Gestion des projets <br> **F7:** Sauvegarde auto des brouillons <br> **F9:** Historique des activités | `feature/projets` <br> `feature/brouillons` <br> `feature/activites` |
 | **Aya Amalal** | **F3:** Gestion des tâches <br> **F4:** Assignation des tâches | `feature/taches` <br> `feature/assignation` |
 | **Malak El Alami** | **F5:** Dashboard personnel <br> **F8:** Gestion des membres <br> **F10:** Notifications | `feature/dashboard` <br> `feature/membres` <br> `feature/notifications` |
