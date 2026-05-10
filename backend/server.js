@@ -8,8 +8,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-const projectRoutes = require('./routes/projets');
-
+const projectRoutes = require('./routes/project');
 const app = express();
 
 app.use(express.json());
