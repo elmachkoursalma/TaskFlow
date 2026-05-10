@@ -17,8 +17,12 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
+<<<<<<< HEAD
 app.use('/api/tasks', taskRoutes);
 app.use('/api/projects', projectRoutes);
+=======
+app.use('/api/dashboard', require('./routes/dashboard'));
+>>>>>>> feature/dashboard
 
 
 // Test Route
