@@ -72,5 +72,12 @@ async function loadDashboard() {
     alert('Erreur lors du chargement du tableau de bord.');
   }
 }//Si le serveur ne répond pas ou retourne une erreur, on affiche une alerte à l'utilisateur au lieu de laisser la page vide.
+document.getElementById('searchInput')
+  .addEventListener('input', loadDashboard);
 
+document.getElementById('statusFilter')
+  .addEventListener('change', loadDashboard);
+
+document.getElementById('priorityFilter')
+  .addEventListener('change', loadDashboard);
 loadDashboard();
