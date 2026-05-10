@@ -9,6 +9,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/project');
+
 const app = express();
 
 app.use(express.json());
@@ -17,12 +18,12 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
-<<<<<<< HEAD
+
 app.use('/api/tasks', taskRoutes);
+
 app.use('/api/projects', projectRoutes);
-=======
+
 app.use('/api/dashboard', require('./routes/dashboard'));
->>>>>>> feature/dashboard
 
 
 // Test Route

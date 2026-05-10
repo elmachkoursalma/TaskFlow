@@ -49,7 +49,31 @@
     </div>
   </div>
 
-  <h2>Tâches en cours</h2>
+ <h2>Tâches en cours</h2>
+ <div style="margin: 20px 0; display: flex; gap: 15px;">
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Rechercher une tâche..."
+    style="padding: 10px; width: 250px;"
+  >
+
+  <select id="statusFilter" style="padding: 10px;">
+    <option value="">Tous les statuts</option>
+    <option value="Pending">Pending</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Completed">Completed</option>
+  </select>
+
+  <select id="priorityFilter" style="padding: 10px;">
+    <option value="">Toutes les priorités</option>
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+  </select>
+
+ </div>
   <table>
     <thead>
       <tr>

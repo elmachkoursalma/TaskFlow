@@ -18,7 +18,27 @@ document.getElementById('logout').addEventListener('click', () => {
 
 async function loadDashboard() {
   try {
-    const { data } = await axios.get('/api/dashboard');
+    const search = document.getElementById('searchInput').value;
+
+    const status = document.getElementById('statusFilter').value;
+
+    const priority = document.getElementById('priorityFilter').value;
+
+    let query = '';
+
+    if (search) {
+      query += `search=${search}&`;
+    }
+
+    if (status) {
+      query += `status=${status}&`;
+    }
+
+    if (priority) {
+      query += `priority=${priority}&`;
+    }
+
+    const { data } = await axios.get(`/api/tasks?${query}`);
 
     // Remplir les 4 cartes
     document.getElementById('activeProjects').textContent = data.activeProjects;
