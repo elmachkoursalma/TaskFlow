@@ -37,11 +37,16 @@ async function loadDashboard() {
     }
 
     const { data } = await axios.get(`http://localhost:5000/api/tasks?${query}`);
+    const dashboardResponse = await axios.get('http://localhost:5000/api/dashboard');
+    const dashboardData = dashboardResponse.data;
     // Remplir les 4 cartes
-    //document.getElementById('activeProjects').textContent = data.activeProjects;
-    //document.getElementById('assignedTasks').textContent  = data.assignedTasks;
-    //document.getElementById('doneTasks').textContent      = data.doneTasks;
-    //document.getElementById('overdueTasks').textContent   = data.overdueTasks;
+    document.getElementById('activeProjects').textContent = dashboardData.activeProjects;
+
+    document.getElementById('assignedTasks').textContent = dashboardData.assignedTasks;
+
+    document.getElementById('doneTasks').textContent = dashboardData.doneTasks;
+
+    document.getElementById('overdueTasks').textContent = dashboardData.overdueTasks;
 
     // Remplir le tableau des tâches
     const tbody = document.getElementById('taskList');
