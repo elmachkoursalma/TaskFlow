@@ -2,10 +2,10 @@
 //Si l'utilisateur n'est pas connecté → il est redirigé automatiquement vers la page de login. Il ne peut pas accéder au dashboard sans être connecté.
 const token = localStorage.getItem('token');
 
-// Rediriger si pas connecté
-if (!token) {
-  window.location.href = '/login.html';
-}
+//Rediriger si pas connecté
+//if (!token) {
+//window.location.href = '/frontend/login.html';
+//}
 
 // Ajouter le token à toutes les requêtes Axios , Sans ça, le serveur refuserait la connexion car la route /api/dashboard est protégée.
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -13,9 +13,7 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 // Bouton déconnexion :Quand l'utilisateur clique sur Déconnexion :Le token est supprimé du LocalStorage et Il est redirigé vers le login.
 document.getElementById('logout').addEventListener('click', () => {
   localStorage.removeItem('token');
-  window.location.href = '/login.html';
-});
-
+  window.location.href = '/frontend/login.html';})
 async function loadDashboard() {
   try {
     const search = document.getElementById('searchInput').value;
@@ -38,24 +36,23 @@ async function loadDashboard() {
       query += `priority=${priority}&`;
     }
 
-    const { data } = await axios.get(`/api/tasks?${query}`);
-
+    const { data } = await axios.get(`http://localhost:5000/api/tasks?${query}`);
     // Remplir les 4 cartes
-    document.getElementById('activeProjects').textContent = data.activeProjects;
-    document.getElementById('assignedTasks').textContent  = data.assignedTasks;
-    document.getElementById('doneTasks').textContent      = data.doneTasks;
-    document.getElementById('overdueTasks').textContent   = data.overdueTasks;
+    //document.getElementById('activeProjects').textContent = data.activeProjects;
+    //document.getElementById('assignedTasks').textContent  = data.assignedTasks;
+    //document.getElementById('doneTasks').textContent      = data.doneTasks;
+    //document.getElementById('overdueTasks').textContent   = data.overdueTasks;
 
     // Remplir le tableau des tâches
     const tbody = document.getElementById('taskList');
     tbody.innerHTML = '';
 
-    if (data.inProgressTasks.length === 0) {
+   if (data.data.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888;">Aucune tâche en cours</td></tr>';
       return;
     }
 
-    data.inProgressTasks.forEach(task => {
+    data.data.forEach(task => {
       const deadline = task.deadline
         ? new Date(task.deadline).toLocaleDateString('fr-FR')
         : '—';
