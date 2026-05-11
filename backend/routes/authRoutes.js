@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
 
         if (existingUser) {
 
-            return res.status(400).json({
+            return res.status(401).json({
                 message: "User already exists"
             });
 
@@ -57,7 +57,7 @@ router.post("/login", async (req, res) => {
 
         if (!user) {
 
-            return res.status(400).json({
+            return res.status(401).json({
                 message: "Invalid credentials"
             });
 
@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
-            message: error.message
+            message: 'Erreur serveur', error: err.message
         });
 
     }
