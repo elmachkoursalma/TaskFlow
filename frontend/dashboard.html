@@ -1,24 +1,91 @@
-//Cette code just pour faire le test
+//Le fichier dashboard.html est la page d'accueil de l'utilisateur après connexion. Il affiche :
+//4 cartes avec les chiffres clés : projets actifs, tâches assignées, terminées, en retard; Un tableau listant toutes les tâches en cours avec leur priorité, projet et deadline; Un bouton déconnexion qui supprime le token et redirige vers le login.
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — TaskFlow</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .cards { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+    .card { background: #f0f4ff; border-radius: 10px; padding: 20px 30px; text-align: center; min-width: 140px; }
+    .card h2 { font-size: 2rem; margin: 0; color: #3b5bdb; }
+    .card p { margin: 5px 0 0; color: #555; font-size: 14px; }
+    .card.red h2 { color: #e03131; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+    th { background: #f8f9fa; font-weight: 600; }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .haute { background: #ffe3e3; color: #c92a2a; }
+    .moyenne { background: #fff3bf; color: #e67700; }
+    .basse { background: #d3f9d8; color: #2f9e44; }
+    #logout { float: right; padding: 8px 16px; background: #e03131; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
 </head>
 <body>
 
-    <h1>Welcome to Dashboard</h1>
+  <button id="logout">Déconnexion</button>
+  <h1>Mon tableau de bord</h1>
 
-    <button onclick="logout()">
-        Logout
-    </button>
+  <div class="cards">
+    <div class="card">
+      <h2 id="activeProjects">—</h2>
+      <p>Projets actifs</p>
+    </div>
+    <div class="card">
+      <h2 id="assignedTasks">—</h2>
+      <p>Tâches assignées</p>
+    </div>
+    <div class="card">
+      <h2 id="doneTasks">—</h2>
+      <p>Tâches terminées</p>
+    </div>
+    <div class="card red">
+      <h2 id="overdueTasks">—</h2>
+      <p>Tâches en retard</p>
+    </div>
+  </div>
 
-    <script src="./js/auth.js"></script>
+ <h2>Tâches en cours</h2>
+ <div style="margin: 20px 0; display: flex; gap: 15px;">
 
-    <script>
-        checkAuth();
-    </script>
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Rechercher une tâche..."
+    style="padding: 10px; width: 250px;"
+  >
 
+  <select id="statusFilter" style="padding: 10px;">
+    <option value="">Tous les statuts</option>
+    <option value="Pending">Pending</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Completed">Completed</option>
+  </select>
+
+  <select id="priorityFilter" style="padding: 10px;">
+    <option value="">Toutes les priorités</option>
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+  </select>
+
+ </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Priorité</th>
+        <th>Projet</th>
+        <th>Deadline</th>
+      </tr>
+    </thead>
+    <tbody id="taskList"></tbody>
+  </table>
+
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
