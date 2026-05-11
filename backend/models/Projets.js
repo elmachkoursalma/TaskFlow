@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
 
 const projetSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true },
-  description: { type: String, trim: true },
-  deadline: { type: Date },
+  title: { 
+    type: String, 
+    required: true, 
+    trim: true 
+  },
+  description: { 
+    type: String, 
+    trim: true 
+  },
+  deadline: { 
+    type: Date 
+  },
   status: {
     type: String,
     enum: ['actif', 'en pause', 'archivé'],
