@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
 
         if (existingUser) {
 
-            return res.status(401).json({
+            return res.status(400).json({
                 message: "User already exists"
             });
 
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
         if (!user) {
 
             return res.status(401).json({
-                message: "Invalid credentials"
+                message: "Email ou mot de passe incorrect"
             });
 
         }
@@ -67,8 +67,8 @@ router.post("/login", async (req, res) => {
 
         if (!isMatch) {
 
-            return res.status(400).json({
-                message: "Invalid credentials"
+            return res.status(401).json({
+                message: "Email ou mot de passe incorrect"
             });
 
         }
@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
-            message: 'Erreur serveur', error: err.message
+            message: 'Erreur serveur', error: error.message
         });
 
     }
