@@ -15,7 +15,14 @@ exports.getProjectTasks = async (req, res) => {
       .populate('assignedTo', 'name email');
     res.status(200).json({ success: true, data: tasks });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+
+    res.status(400).json({
+
+      success: false,
+      message: error.message
+
+    });
+
   }
 };
 
