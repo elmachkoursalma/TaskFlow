@@ -1,34 +1,29 @@
 const mongoose = require('mongoose');
 
-const projetSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
-    required: true, 
-    trim: true 
+const projectSchema = new mongoose.Schema({
+  title:{ 
+    type : String, 
+    required: true 
   },
   description: { 
-    type: String, 
-    trim: true 
+    type: String 
   },
-  deadline: { 
-    type: Date 
+  deadline:{ 
+    type : Date 
   },
   status: {
     type: String,
     enum: ['actif', 'en pause', 'archivé'],
     default: 'actif'
   },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  }
+  owner:   { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
-projetSchema.pre('deleteOne', { document: false, query: true }, async function (next) {
-  const projetId = this.getFilter()._id;
-  await mongoose.model('Task').deleteMany({ project: projetId });
+// Suppression en cascade des tâches liées au projet
+projectSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  await mongoose.model('Task').deleteMany({ project: this._id });
   next();
 });
 
-module.exports = mongoose.model('Projet', projetSchema);
+module.exports = mongoose.model('Project', projectSchema);

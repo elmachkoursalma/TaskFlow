@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authMiddleware = require('./middleware/authMiddleware');
-const projectRoutes = require('./routes/projets');
+const projectRoutes = require('./routes/projects');
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
@@ -13,7 +13,7 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes); // ✅ ICI dehors
+app.use('/api/projects', projectRoutes); 
 
 app.get('/', (req, res) => {
   res.json({ message: 'TaskFlow API fonctionne ✅' });
