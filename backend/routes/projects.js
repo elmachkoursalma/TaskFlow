@@ -12,9 +12,9 @@ router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await Project.countDocuments({ owner: req.user.userId });
+    const total = await Project.countDocuments({ owner: req.user.id });
 
-    const projects = await Project.find({ owner: req.user.userId })
+    const projects = await Project.find({ owner: req.user.id })
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -44,7 +44,7 @@ try {
     title,
     description,
     deadline,
-    owner: req.user.userId,
+    owner: req.user.id,
   });
   await project.save();
   res.status(201).json(project);
@@ -63,7 +63,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Projet introuvable' });
     }
 
-    if (project.owner.toString() !== req.user.userId.toString()) {
+    if (project.owner.toString() !== req.user.id.toString()) {
       return res.status(403).json({ message: 'Action non autorisée' });
     }
 
@@ -91,7 +91,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Projet introuvable' });
     }
 
-    if (project.owner.toString() !== req.user.userId.toString()) {
+    if (project.owner.toString() !== req.user.id.toString()) {
       return res.status(403).json({ message: 'Action non autorisée' });
     }
 
