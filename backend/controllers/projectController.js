@@ -1,7 +1,5 @@
 const Project = require('../models/Project');
 
-const Project = require('../models/Project');
-
 // GET — Liste paginée
 exports.getProjects = async (req, res) => {
   try {
