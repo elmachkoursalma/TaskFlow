@@ -28,6 +28,13 @@ app.get('/api/protected', authMiddleware, (req, res) => {
   });
 
 });
+app.post('/test', (req, res) => {
+
+  console.log(req.body);
+
+  res.json(req.body);
+
+});
 app.listen(process.env.PORT, () => {
   console.log(`Serveur démarré sur le port ${process.env.PORT}`);
 });

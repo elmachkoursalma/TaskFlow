@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // POST /api/auth/inscription
@@ -31,7 +32,7 @@ exports.connexion = async (req, res) => {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
 
-    const valide = await user.comparePassword(password);
+    const valide = await bcrypt.compare(password, user.password);
     if (!valide) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
