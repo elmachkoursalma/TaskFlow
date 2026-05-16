@@ -1,14 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
-require('dotenv').config();
-
 const authMiddleware = require('./middleware/authMiddleware');
-
+const projectRoutes = require('./routes/projects');
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-const projectRoutes = require('./routes/project');
+require('dotenv').config();
+require('./models/Task');
 
 const app = express();
 
@@ -18,10 +16,9 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes); 
 
 app.use('/api/tasks', taskRoutes);
-
-app.use('/api/projects', projectRoutes);
 
 app.use('/api/dashboard', require('./routes/dashboard'));
 
