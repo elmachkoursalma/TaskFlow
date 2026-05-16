@@ -2,7 +2,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 // POST /api/auth/inscription
-exports.inscription = async (req, res) => {
+exports.register = async (req, res) => {
   console.log(req.body);
   try {
     const { fullName, email, password } = req.body;
@@ -22,7 +22,7 @@ exports.inscription = async (req, res) => {
 };
 
 // POST /api/auth/connexion
-exports.connexion = async (req, res) => {
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
