@@ -38,6 +38,7 @@ loginForm.addEventListener("submit", async (e) => {
         }
 
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user)); // ← ajouté
 
         alert("Login successful");
 
