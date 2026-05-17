@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-// const Project = require('../models/Project'); // en attente membre 2
+const Project = require('../models/Project'); // en attente membre 2
 const authMiddleware = require('../middleware/authMiddleware');
 
 // ── 1. Inviter un membre par email ──
@@ -16,20 +16,20 @@ router.post('/:projectId/invite', authMiddleware, async (req, res) => {
     }
 
     // Vérifier que le projet existe et que c'est le créateur
-    // const project = await Project.findById(req.params.projectId);
-    // if (!project) return res.status(404).json({ message: 'Projet introuvable' });
-    // if (project.owner.toString() !== req.user.id) {
-    //   return res.status(403).json({ message: 'Accès refusé — vous n\'êtes pas le créateur' });
-    // }
+    const project = await Project.findById(req.params.projectId);
+    if (!project) return res.status(404).json({ message: 'Projet introuvable' });
+    if (project.owner.toString() !== req.user.id) {
+    return res.status(403).json({ message: 'Accès refusé — vous n\'êtes pas le créateur' });
+    }
 
     // Vérifier que le membre n'est pas déjà dans le projet
-    // if (project.members.includes(user._id)) {
-    //   return res.status(400).json({ message: 'Cet utilisateur est déjà membre du projet' });
-    // }
+    if (project.members.includes(user._id)) {
+      return res.status(400).json({ message: 'Cet utilisateur est déjà membre du projet' });
+    }
 
     // Ajouter le membre
-    // project.members.push(user._id);
-    // await project.save();
+    project.members.push(user._id);
+    await project.save();
 
     res.json({ message: `${user.name} a été invité avec succès` });
 
@@ -44,17 +44,17 @@ router.delete('/:projectId/members/:memberId', authMiddleware, async (req, res) 
   try {
 
     // Vérifier que c'est le créateur
-    // const project = await Project.findById(req.params.projectId);
-    // if (!project) return res.status(404).json({ message: 'Projet introuvable' });
-    // if (project.owner.toString() !== req.user.id) {
-    //   return res.status(403).json({ message: 'Accès refusé — vous n\'êtes pas le créateur' });
-    // }
+    const project = await Project.findById(req.params.projectId);
+    if (!project) return res.status(404).json({ message: 'Projet introuvable' });
+    if (project.owner.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Accès refusé — vous n\'êtes pas le créateur' });
+    }
 
     // Retirer le membre
-    // project.members = project.members.filter(
-    //   m => m.toString() !== req.params.memberId
-    // );
-    // await project.save();
+     project.members = project.members.filter(
+       m => m.toString() !== req.params.memberId
+     );
+     await project.save();
 
     res.json({ message: 'Membre retiré avec succès' });
 
@@ -68,12 +68,12 @@ router.delete('/:projectId/members/:memberId', authMiddleware, async (req, res) 
 router.get('/:projectId/members', authMiddleware, async (req, res) => {
   try {
 
-    // const project = await Project.findById(req.params.projectId)
-    //   .populate('members', 'name email');
-    // if (!project) return res.status(404).json({ message: 'Projet introuvable' });
+    const project = await Project.findById(req.params.projectId)
+       .populate('members', 'name email');
+    if (!project) return res.status(404).json({ message: 'Projet introuvable' });
 
-    // res.json(project.members);
-    res.json([]); // temporaire en attente membre 2
+    res.json(project.members);
+    
 
   } catch (error) {
     console.error('Erreur liste membres:', error);
