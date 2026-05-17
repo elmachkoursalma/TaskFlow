@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Project = require('../models/Project'); // en attente membre 2
+const Project = require('../models/Projets'); 
 const authMiddleware = require('../middleware/authMiddleware');
 
 // ── 1. Inviter un membre par email ──
