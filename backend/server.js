@@ -6,13 +6,13 @@ require('dotenv').config();
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-const projectRoutes = require('./routes/project');
+const projectRoutes = require('./routes/projects');
 const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
 // Middlewares
-app.use(express.json());
+app.use(express.json()); 
 app.use(cors());
 
 // Route Definitions
