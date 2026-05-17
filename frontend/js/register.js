@@ -10,43 +10,29 @@ registerForm.addEventListener("submit", async (e) => {
 
     try {
 
-        const response = await fetch(
+        const response = await axios.post(
             "http://localhost:5000/api/auth/register",
             {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    fullName,
-                    email,
-                    password
-                })
-
+                fullName,
+                email,
+                password
             }
         );
 
-        const data = await response.json();
+        const data = response.data;
 
         alert(data.message);
 
-        if (response.ok) {
-
-            window.location.href = "login.html";
-
-        }
+        window.location.href = "login.html";
 
     } catch (error) {
 
         console.error(error);
 
-      alert("Registration failed");
-
-}
+        alert(
+            error.response?.data?.message || "Registration failed"
+        );
 
     }
 
-);
+});
