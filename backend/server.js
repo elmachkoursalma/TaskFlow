@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/projects', require('./routes/members'));
+app.use('/api/projects', require('./routes/membres'));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connecté'))
