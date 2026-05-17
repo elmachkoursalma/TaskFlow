@@ -3,12 +3,12 @@ const router = express.Router();
 const Notification = require('../models/Notification');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// ── 1. Récupérer toutes les notifications ──
+// ── 1. Récupérer toutes les notifications de l'utilisateur ──
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const notifications = await Notification.find({
       user: req.user.id
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }); // plus récente en premier
 
     res.json(notifications);
 
@@ -17,8 +17,7 @@ router.get('/', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
-
-// ── 2. Marquer comme lue ──
+// ── 2. Marquer une notification comme lue ──
 router.patch('/:id/read', authMiddleware, async (req, res) => {
   try {
     const notification = await Notification.findOneAndUpdate(
@@ -38,8 +37,7 @@ router.patch('/:id/read', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
-
-// ── 3. Créer une notification ──
+// ── 3. Créer une notification (utilisée par les autres routes) ──
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { type, message, userId } = req.body;
@@ -59,4 +57,9 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+module.exports = router;
+
+>>>>>>> 66fded57ced6141bc84f21d494e10273d58ad243

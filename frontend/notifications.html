@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications — TaskFlow</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h1>Notifications</h1>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <div class="bell" onclick="window.location.href='notifications.html'">
+        🔔
+        <span class="bell-badge" id="badge" style="display:none;">0</span>
+      </div>
+      <button id="logout">Déconnexion</button>
+    </div>
+  </div>
+
+  <div id="notificationsList"></div>
+  <div id="empty" style="display:none;">Aucune notification pour le moment</div>
+
+  <script src="js/notifications.js"></script>
+</body>
+</html>
