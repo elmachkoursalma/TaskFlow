@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-const Project = require('../models/Project');
+const Project = require('../models/Projets');
 const authMiddleware = require('../middleware/authMiddleware');
 //Quand le frontend appelle GET /api/dashboard, cette fonction s'exécute. Le authMiddleware vérifie d'abord que l'utilisateur est bien connecté
 router.get('/', authMiddleware, async (req, res) => {
