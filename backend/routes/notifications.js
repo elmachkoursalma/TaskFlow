@@ -57,9 +57,4 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
-
->>>>>>> 66fded57ced6141bc84f21d494e10273d58ad243
