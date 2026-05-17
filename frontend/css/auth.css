@@ -44,7 +44,7 @@ input{
     font-size: 15px;
     background-color: #fdf8f0;
     color: #5c4033;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 input:focus{
@@ -62,7 +62,7 @@ button{
     color: white;
     font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 button:hover{

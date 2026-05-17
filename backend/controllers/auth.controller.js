@@ -1,9 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-
-// POST /api/auth/inscription
+// POST /api/auth/register
 exports.register = async (req, res) => {
-  console.log(req.body);
   try {
     const { fullName, email, password } = req.body;
 
@@ -20,8 +18,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur', error: err.message });
   }
 };
-
-// POST /api/auth/connexion
+// POST /api/auth/login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
