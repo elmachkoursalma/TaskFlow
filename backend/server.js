@@ -2,33 +2,69 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authMiddleware = require('./middleware/authMiddleware');
-require('dotenv').config();
-
+const projectRoutes = require('./routes/projects');
 const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+require('dotenv').config();
+require('./models/Task');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
+
+// Routes
 app.use('/api/auth', authRoutes);
+<<<<<<< HEAD
 app.use('/api/projects', require('./routes/membres'));
+=======
+app.use('/api/projects', projectRoutes); 
+>>>>>>> 55585eb23e41c67c5f98e7e3ea8db09ee2174313
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connecté'))
-  .catch((err) => console.error('Erreur MongoDB :', err));
+app.use('/api/tasks', taskRoutes);
 
+app.use('/api/dashboard', require('./routes/dashboard'));
+
+
+// Test Route
 app.get('/', (req, res) => {
-  res.json({ message: 'TaskFlow API fonctionne ✅' });
-});
-app.get('/api/protected', authMiddleware, (req, res) => {
 
   res.json({
-    message: 'Protected route access granted',
-    user: req.user
+    message: 'TaskFlow API fonctionne ✅'
   });
 
 });
+
+
+// Protected Route
+app.get('/api/protected', authMiddleware, (req, res) => {
+
+  res.json({
+
+    message: 'Protected route access granted',
+    user: req.user
+
+  });
+
+});
+
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+
+  .then(() => console.log('MongoDB connecté'))
+
+  .catch((err) =>
+    console.error('Erreur MongoDB :', err)
+  );
+
+
+// Start Server
 app.listen(process.env.PORT, () => {
-  console.log(`Serveur démarré sur le port ${process.env.PORT}`);
+
+  console.log(
+    `Serveur démarré sur le port ${process.env.PORT}`
+  );
+
 });
