@@ -16,15 +16,13 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
-<<<<<<< HEAD
 app.use('/api/projects', require('./routes/membres'));
-=======
 app.use('/api/projects', projectRoutes); 
->>>>>>> 55585eb23e41c67c5f98e7e3ea8db09ee2174313
 
 app.use('/api/tasks', taskRoutes);
 
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 
 // Test Route
