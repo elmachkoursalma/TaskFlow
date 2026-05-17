@@ -37,5 +37,25 @@ router.patch('/:id/read', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
+// ── 3. Créer une notification (utilisée par les autres routes) ──
+router.post('/', authMiddleware, async (req, res) => {
+  try {
+    const { type, message, userId } = req.body;
 
+    const notification = new Notification({
+      type,
+      message,
+      user: userId
+    });
+
+    await notification.save();
+    res.status(201).json(notification);
+
+  } catch (error) {
+    console.error('Erreur création notification:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+module.exports = router;
 
