@@ -1,0 +1,160 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Variables du thème ── */
+:root {
+  --primary:       #6b5b3e;
+  --primary-dark:  #4e3d2f;
+  --primary-light: #8a7d4f;
+  --bg:            #f5f0e6;
+  --bg-card:       #fffaf2;
+  --bg-input:      #fdf8f0;
+  --text:          #5c4033;
+  --border:        #8a7d4f;
+  --danger:        #e03131;
+  --success:       #2f9e44;
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #f5f0e6, #d6c7a1);
+  min-height: 100vh;
+  padding: 20px;
+  color: var(--text);
+}
+
+/* Titres */
+h1, h2 {
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+/* Carte */
+.card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 4px 15px rgba(92, 64, 51, 0.2);
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  background-color: var(--bg-input);
+  color: var(--text);
+  transition: 0.3s;
+  margin-bottom: 10px;
+}
+
+input:focus {
+  border-color: var(--text);
+  box-shadow: 0 0 8px rgba(92, 64, 51, 0.3);
+}
+
+/* Boutons */
+button, .btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background-color: #c92a2a;
+}
+
+/* Tableau */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+th {
+  background: var(--bg);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Messages */
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.success { background: #d3f9d8; color: var(--success); }
+.error   { background: #ffe3e3; color: var(--danger); }
+
+/* Badges priorité */
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.haute   { background: #ffe3e3; color: #c92a2a; }
+.moyenne { background: #fff3bf; color: #e67700; }
+.basse   { background: #d3f9d8; color: var(--success); }
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+/* Badge notifications */
+.bell {
+  position: relative;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.bell-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--danger);
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+}

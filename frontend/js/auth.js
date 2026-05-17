@@ -1,34 +1,25 @@
-// Fonction pour restaurer la session
-async function restoreSession() {
-    const token = localStorage.getItem("token");
+// 1. Ajouter automatiquement le token aux requêtes Axios si l'utilisateur est connecté
+const token = localStorage.getItem("token");
 
-    if (!token) {
-        return null;
-    }
-
-    try {
-        const res = await axios.get("/api/auth/me", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        return res.data;
-
-    } catch (error) {
-        localStorage.removeItem("token");
-        return null;
-    }
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
+// 2. Vérifier si l'utilisateur est connecté
 function checkAuth() {
-    const token = localStorage.getItem("token");
-    if (!token) {
+
+    if (!localStorage.getItem("token")) {
         window.location.href = "login.html";
     }
+
 }
 
+// 3. Gérer la déconnexion
 function logout() {
+
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     window.location.href = "login.html";
+
 }

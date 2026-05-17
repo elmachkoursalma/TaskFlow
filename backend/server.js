@@ -22,6 +22,35 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // Database Connection
+app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/projects', require('./routes/membres'));
+app.use('/api/notifications', require('./routes/notifications'));
+
+
+// Test Route
+app.get('/', (req, res) => {
+
+  res.json({
+    message: 'TaskFlow API fonctionne ✅'
+  });
+
+});
+
+
+// Protected Route
+app.get('/api/protected', authMiddleware, (req, res) => {
+
+  res.json({
+
+    message: 'Protected route access granted',
+    user: req.user
+
+  });
+
+});
+
+
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connecté ✅'))
   .catch((err) => console.error('Erreur de connexion MongoDB :', err));
