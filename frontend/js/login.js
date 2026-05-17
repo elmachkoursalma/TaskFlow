@@ -1,7 +1,6 @@
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {
-
     e.preventDefault();
 
     const email = document.getElementById("email").value;
@@ -9,46 +8,30 @@ loginForm.addEventListener("submit", async (e) => {
 
     try {
 
-        const response = await fetch(
+        const response = await axios.post(
             "http://localhost:5000/api/auth/login",
             {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-
+                email,
+                password
             }
         );
 
-        const data = await response.json();
-
-        if (!response.ok) {
-
-            alert(data.message);
-
-            return;
-
-        }
+        const data = response.data;
 
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user)); // ← ajouté
+        localStorage.setItem("user", JSON.stringify(data.user));
 
         alert("Login successful");
 
-        window.location.href = "dashboard.html";
+        window.location.href = "projects.html";
 
     } catch (error) {
 
         console.error(error);
 
-        alert("Login failed");
+        alert(
+            error.response?.data?.message || "Login failed"
+        );
 
     }
 
