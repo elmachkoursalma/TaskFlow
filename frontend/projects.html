@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow — Mes Projets</title>
+  <link rel="stylesheet" href="projets.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <h1 class="logo">TaskFlow</h1>
+    <div class="nav-right">
+      <span id="user-name"></span>
+      <button onclick="logout()" class="btn-logout">Déconnexion</button>
+    </div>
+  </nav>
+
+  <!-- CONTENU PRINCIPAL -->
+  <div class="container">
+
+    <!-- FORMULAIRE CRÉATION -->
+    <div class="card form-card">
+      <h2>Nouveau Projet</h2>
+      <div class="form-group">
+        <input type="text" id="title" placeholder="Titre du projet" />
+      </div>
+      <div class="form-group">
+        <textarea id="description" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <input type="date" id="deadline" />
+      </div>
+      <button onclick="createProject()" class="btn-primary">Créer le projet</button>
+    </div>
+
+    <!-- LISTE DES PROJETS -->
+    <div class="projects-section">
+      <h2>Mes Projets</h2>
+      <div id="projects-list" class="projects-grid"></div>
+
+      <!-- PAGINATION -->
+      <div id="pagination" class="pagination"></div>
+    </div>
+
+  </div>
+
+  <!-- MODAL MODIFICATION -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Modifier le Projet</h2>
+      <div class="form-group">
+        <input type="text" id="edit-title" placeholder="Titre" />
+      </div>
+      <div class="form-group">
+        <textarea id="edit-description" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <input type="date" id="edit-deadline" />
+      </div>
+      <div class="form-group">
+        <select id="edit-status">
+          <option value="actif">Actif</option>
+          <option value="en pause">En pause</option>
+          <option value="archivé">Archivé</option>
+        </select>
+      </div>
+      <div class="modal-buttons">
+        <button onclick="saveEdit()" class="btn-primary">Sauvegarder</button>
+        <button onclick="closeModal()" class="btn-cancel">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/projects.js"></script>
+</body>
+</html>
