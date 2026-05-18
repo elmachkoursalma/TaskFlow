@@ -18,6 +18,49 @@ const PROJECT_ID = urlParams.get('id');
 const tableBody = document.getElementById('taskTableBody');
 const taskForm = document.getElementById('taskForm');
 
+
+// FONCTIONNALITÉ 7 — Sauvegarde automatique des brouillons
+// Sauvegarder le brouillon dans localStorage
+function saveDraft(projectId) {
+    const data = {
+        title: document.getElementById('taskTitle').value,
+        priority: document.getElementById('taskPriority').value
+    };
+    localStorage.setItem(`draft_${projectId}`, JSON.stringify(data));
+}
+
+// Restaurer le brouillon au chargement
+function restoreDraft(projectId) {
+    const draft = localStorage.getItem(`draft_${projectId}`);
+    if (!draft) return;
+
+    const data = JSON.parse(draft);
+    const restore = confirm('Un brouillon a été trouvé. Voulez-vous le restaurer ?');
+
+    if (restore) {
+        if (data.title) document.getElementById('taskTitle').value = data.title;
+        if (data.priority) document.getElementById('taskPriority').value = data.priority;
+    } else {
+        localStorage.removeItem(`draft_${projectId}`);
+    }
+}
+
+// Supprimer le brouillon après soumission réussie
+function deleteDraft(projectId) {
+    localStorage.removeItem(`draft_${projectId}`);
+}
+
+// Initialiser la sauvegarde automatique sur chaque champ
+function initDraftAutoSave(projectId) {
+    const fields = ['taskTitle', 'taskPriority'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', () => saveDraft(projectId));
+        }
+    });
+}
+
 /**
  * 1. [GET] Recuperer les taches du projet depuis la base de donnees
  */
