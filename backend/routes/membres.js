@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const Project = require('../models/Project'); 
 const authMiddleware = require('../middleware/authMiddleware');
+const { logActivity } = require('../controllers/activityController');
 
 // ── 1. Inviter un membre par email ──
 router.post('/:projectId/invite', authMiddleware, async (req, res) => {
@@ -30,7 +31,7 @@ router.post('/:projectId/invite', authMiddleware, async (req, res) => {
     // Ajouter le membre
     project.members.push(user._id);
     await project.save();
-
+    await logActivity('member_added', project._id, req.user.id, { memberEmail: email });
     res.json({ message: `${user.fullName} a été invité avec succès` });
 
   } catch (error) {
@@ -49,12 +50,18 @@ router.delete('/:projectId/members/:memberId', authMiddleware, async (req, res) 
     if (project.owner.toString() !== req.user.id) {
       return res.status(403).json({ message: 'Accès refusé — vous n\'êtes pas le créateur' });
     }
+    // Récupérer l'email avant de retirer
+    const member = await User.findById(req.params.memberId);
 
     // Retirer le membre
      project.members = project.members.filter(
        m => m.toString() !== req.params.memberId
      );
      await project.save();
+     
+     await logActivity('member_removed', project._id, req.user.id, {
+      memberEmail: member?.email
+    });
 
     res.json({ message: 'Membre retiré avec succès' });
 
@@ -69,7 +76,7 @@ router.get('/:projectId/members', authMiddleware, async (req, res) => {
   try {
 
     const project = await Project.findById(req.params.projectId)
-       .populate('members', 'name email');
+       .populate('members', 'fullName email');
     if (!project) return res.status(404).json({ message: 'Projet introuvable' });
 
     res.json(project.members);

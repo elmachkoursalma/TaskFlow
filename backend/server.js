@@ -2,38 +2,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
+
+const authMiddleware = require('./middleware/authMiddleware');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projects');
 const dashboardRoutes = require('./routes/dashboard');
-const authMiddleware = require('./middleware/authMiddleware');
+
 
 const app = express();
-const path = require('path');
+
 // Middlewares
 app.use(express.json()); 
 app.use(cors());
-
 app.use(express.static(path.join(__dirname, '../frontend')));
+
 
 // Route Definitions
 app.use('/api/auth', authRoutes);
-
 app.use('/api/projects', require('./routes/membres'));
+app.use('/api/projects', require('./routes/activities'))
 app.use('/api/projects', projectRoutes); 
-
 app.use('/api/tasks', taskRoutes);
-app.use('/api/projects', projectRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-
-// Database Connection
-app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/projects', require('./routes/membres'));
 app.use('/api/notifications', require('./routes/notifications'));
-app.use('/api/projects', require('./routes/activities'));
+;
 
 // Test Route
 app.get('/', (req, res) => {
