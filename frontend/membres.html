@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membres — TaskFlow</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <button id="logout">Déconnexion</button>
+  <h1>Gestion des membres</h1>
+
+  <!-- Message de retour -->
+  <div id="message" style="display:none;" class="message"></div>
+
+  <!-- Formulaire invitation -->
+  <div class="card">
+    <h2>Inviter un membre</h2>
+    <input type="email" id="emailInput" placeholder="Adresse email du membre...">
+    <button class="btn" onclick="inviterMembre()">Inviter</button>
+  </div>
+
+  <!-- Liste des membres -->
+  <div class="card">
+    <h2>Membres du projet</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="membersList"></tbody>
+    </table>
+  </div>
+
+  <script src="js/members.js"></script>
+</body>
+</html>
