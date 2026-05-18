@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projects');
 const dashboardRoutes = require('./routes/dashboard');
+const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
 
