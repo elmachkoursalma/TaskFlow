@@ -3,9 +3,9 @@
 const token = localStorage.getItem('token');
 
 //Rediriger si pas connecté
-//if (!token) {
-//window.location.href = '/frontend/login.html';
-//}
+if (!token) {
+   window.location.href = '/frontend/login.html';
+}
 
 // Ajouter le token à toutes les requêtes Axios , Sans ça, le serveur refuserait la connexion car la route /api/dashboard est protégée.
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -13,7 +13,7 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 // Bouton déconnexion :Quand l'utilisateur clique sur Déconnexion :Le token est supprimé du LocalStorage et Il est redirigé vers le login.
 document.getElementById('logout').addEventListener('click', () => {
   localStorage.removeItem('token');
-  window.location.href = '/frontend/login.html';})
+  window.location.href = 'login.html';})
 async function loadDashboard() {
   try {
     const search = document.getElementById('searchInput').value;
