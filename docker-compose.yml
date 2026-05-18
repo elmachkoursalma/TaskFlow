@@ -17,6 +17,7 @@ services:
       - ./backend/.env
     depends_on:
       - mongo
-
+    volumes :
+      - ./frontend:/app/frontend  
 volumes:
   mongo_data:
