@@ -59,3 +59,22 @@ exports.deleteTask = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+exports.assignTask = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const task =await Task.findByIdAndUpdate(
+      req.params.id,
+      { assignedTo: userId },
+      { new: true, runValidators: true }
+    
+    ).populate('assignedTo', 'name email');
+
+    if (!task) {
+      return res.status(404).json({success: false, message: 'Task not found' });
+  }
+  res.status(200).json({ success: true,data: task });
+} catch (error) {
+  res.status(400).json({ success: false, message: error.message });
+}
+};
