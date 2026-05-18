@@ -17,6 +17,7 @@ app.use(cors());
 
 // Route Definitions
 app.use('/api/auth', authRoutes);
+
 app.use('/api/projects', require('./routes/membres'));
 app.use('/api/projects', projectRoutes); 
 
