@@ -30,7 +30,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/projects', require('./routes/membres'));
 app.use('/api/notifications', require('./routes/notifications'));
-
+app.use('/api/projects', require('./routes/activities'));
 
 // Test Route
 app.get('/', (req, res) => {
