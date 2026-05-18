@@ -1,5 +1,5 @@
 const Task = require('../models/Task');
-
+// Create a new task
 exports.createTask = async (req, res) => {
   try {
     const task = await Task.create(req.body);
@@ -8,7 +8,7 @@ exports.createTask = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
+// Get tasks for a specific project
 exports.getProjectTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ project: req.params.projectId })
@@ -25,7 +25,7 @@ exports.getProjectTasks = async (req, res) => {
 
   }
 };
-
+// Update task status
 exports.updateTaskStatus = async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(
@@ -38,7 +38,7 @@ exports.updateTaskStatus = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
+// Update task details
 exports.updateTask = async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
@@ -50,7 +50,7 @@ exports.updateTask = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
+// Delete a task
 exports.deleteTask = async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);
@@ -59,6 +59,7 @@ exports.deleteTask = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+// Assign a task to a user
 exports.assignTask = async (req, res) => {
   try {
     const { userId } = req.body;
