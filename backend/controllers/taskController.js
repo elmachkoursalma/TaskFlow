@@ -1,4 +1,5 @@
 const Task = require('../models/Task');
+const { logActivity } = require('./activityController');
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
