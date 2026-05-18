@@ -69,7 +69,7 @@ router.get('/:projectId/members', authMiddleware, async (req, res) => {
   try {
 
     const project = await Project.findById(req.params.projectId)
-       .populate('members', 'name email');
+       .populate('members', 'fullName email');
     if (!project) return res.status(404).json({ message: 'Projet introuvable' });
 
     res.json(project.members);

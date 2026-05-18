@@ -43,7 +43,7 @@ async function loadMembers() {
     data.forEach(member => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${member.name}</td>
+        <td>${member.fullName}</td>
         <td>${member.email}</td>
         <td>
           <button class="btn btn-red" onclick="retirerMembre('${member._id}')">
