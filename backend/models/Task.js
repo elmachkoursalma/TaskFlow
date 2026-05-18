@@ -15,14 +15,14 @@ const taskSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ['Pending', 'In Progress', 'Completed'],
-    default: 'Pending'
+    enum: ['à faire', 'en cours', 'terminé'],
+    default: 'à faire'
   },
 
   priority: {
     type: String,
-    enum: ['Low', 'Medium', 'High'],
-    default: 'Medium'
+    enum: ['basse', 'moyenne', 'haute'],
+    default: 'moyenne'
   },
 
   project: {
