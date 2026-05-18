@@ -11,10 +11,12 @@ const dashboardRoutes = require('./routes/dashboard');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
-
+const path = require('path');
 // Middlewares
 app.use(express.json()); 
 app.use(cors());
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Route Definitions
 app.use('/api/auth', authRoutes);
