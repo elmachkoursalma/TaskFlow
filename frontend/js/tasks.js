@@ -103,6 +103,7 @@ taskForm.addEventListener('submit', async function(e) {
             fetchTasks(); // Actualiser le tableau sans recharger la page
             titleInput.value = ''; // Vider le champ de saisie
             priorityInput.value = 'moyenne'; // Reset de la priorite
+            deleteDraft(PROJECT_ID);
         }
     } catch (error) {
         console.error("Erreur lors de l'ajout de la tache:", error);
@@ -180,5 +181,17 @@ function initDraftAutoSave(projectId) {
         }
     });
 }
-// Lancement automatique du script au chargement initial de la page
-fetchTasks();
+
+
+// Lancement automatique au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    fetchTasks();
+
+    if (PROJECT_ID) {
+        // Restaurer le brouillon si existant
+        restoreDraft(PROJECT_ID);
+
+        // Initialiser la sauvegarde automatique
+        initDraftAutoSave(PROJECT_ID);
+    }
+});
