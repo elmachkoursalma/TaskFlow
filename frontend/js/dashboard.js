@@ -16,52 +16,45 @@ document.getElementById('logout').addEventListener('click', () => {
   window.location.href = 'login.html';})
 async function loadDashboard() {
   try {
-    const search = document.getElementById('searchInput').value;
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const priorityFilter = document.getElementById('priorityFilter').value;
 
-    const status = document.getElementById('statusFilter').value;
-
-    const priority = document.getElementById('priorityFilter').value;
-
-    let query = '';
-
-    if (search) {
-      query += `search=${search}&`;
-    }
-
-    if (status) {
-      query += `status=${status}&`;
-    }
-
-    if (priority) {
-      query += `priority=${priority}&`;
-    }
-
-    const { data } = await axios.get(`http://localhost:5000/api/tasks?${query}`);
     const dashboardResponse = await axios.get('http://localhost:5000/api/dashboard');
     const dashboardData = dashboardResponse.data;
+
     // Remplir les 4 cartes
     document.getElementById('activeProjects').textContent = dashboardData.activeProjects;
-
     document.getElementById('assignedTasks').textContent = dashboardData.assignedTasks;
-
     document.getElementById('doneTasks').textContent = dashboardData.doneTasks;
-
     document.getElementById('overdueTasks').textContent = dashboardData.overdueTasks;
 
-    // Remplir le tableau des tâches
+    // Filtrer les tâches en cours côté client
+    let tasks = dashboardData.inProgressTasks;
+
+    if (search) {
+      tasks = tasks.filter(t => t.title.toLowerCase().includes(search));
+    }
+    if (statusFilter) {
+      tasks = tasks.filter(t => t.status === statusFilter);
+    }
+    if (priorityFilter) {
+      tasks = tasks.filter(t => t.priority === priorityFilter);
+    }
+
+    // Remplir le tableau
     const tbody = document.getElementById('taskList');
     tbody.innerHTML = '';
 
-   if (data.data.length === 0) {
+    if (tasks.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888;">Aucune tâche en cours</td></tr>';
       return;
     }
 
-    data.data.forEach(task => {
+    tasks.forEach(task => {
       const deadline = task.deadline
         ? new Date(task.deadline).toLocaleDateString('fr-FR')
         : '—';
-
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${task.title}</td>
@@ -76,7 +69,8 @@ async function loadDashboard() {
     console.error('Erreur chargement dashboard:', error);
     alert('Erreur lors du chargement du tableau de bord.');
   }
-}//Si le serveur ne répond pas ou retourne une erreur, on affiche une alerte à l'utilisateur au lieu de laisser la page vide.
+}
+//Si le serveur ne répond pas ou retourne une erreur, on affiche une alerte à l'utilisateur au lieu de laisser la page vide.
 document.getElementById('searchInput')
   .addEventListener('input', loadDashboard);
 
