@@ -1,5 +1,5 @@
 const token = localStorage.getItem('token');
-const projectId = new URLSearchParams(window.location.search).get('id');
+const projectId = new URLSearchParams(window.location.search).get('projectId');
 
 async function loadActivities() {
   try {
