@@ -9,10 +9,15 @@ require('dotenv').config();
 require('./models/Task');
 
 const app = express();
-
-app.use(express.json());
+const path = require('path');
+// Middlewares
+app.use(express.json()); 
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Route Definitions
+app.use('/api/auth', authRoutes);
 
 // Routes
 app.use('/api/auth', authRoutes);
