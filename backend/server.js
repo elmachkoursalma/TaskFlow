@@ -1,25 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authMiddleware = require('./middleware/authMiddleware');
-const projectRoutes = require('./routes/projects');
+require('dotenv').config();
+
+// Import Routes
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-require('dotenv').config();
-require('./models/Task');
+const projectRoutes = require('./routes/projects');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
-app.use(express.json());
+// Middlewares
+app.use(express.json()); 
 app.use(cors());
 
-
-// Routes
+// Route Definitions
 app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes); 
-
 app.use('/api/tasks', taskRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
+// Database Connection
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/projects', require('./routes/membres'));
 app.use('/api/notifications', require('./routes/notifications'));
@@ -50,19 +52,16 @@ app.get('/api/protected', authMiddleware, (req, res) => {
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connecté ✅'))
+  .catch((err) => console.error('Erreur de connexion MongoDB :', err));
 
-  .then(() => console.log('MongoDB connecté'))
+// Root Endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'TaskFlow API is running ✅' });
+});
 
-  .catch((err) =>
-    console.error('Erreur MongoDB :', err)
-  );
-
-
-// Start Server
-app.listen(process.env.PORT, () => {
-
-  console.log(
-    `Serveur démarré sur le port ${process.env.PORT}`
-  );
-
+// Server Configuration
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur le port ${PORT}`);
 });
