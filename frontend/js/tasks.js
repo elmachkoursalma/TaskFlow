@@ -103,6 +103,7 @@ taskForm.addEventListener('submit', async function(e) {
             fetchTasks(); // Actualiser le tableau sans recharger la page
             titleInput.value = ''; // Vider le champ de saisie
             priorityInput.value = 'moyenne'; // Reset de la priorite
+            deleteDraft(PROJECT_ID);
         }
     } catch (error) {
         console.error("Erreur lors de l'ajout de la tache:", error);
@@ -139,5 +140,58 @@ async function deleteTask(id) {
     }
 }
 
-// Lancement automatique du script au chargement initial de la page
-fetchTasks();
+// FONCTIONNALITÉ 7 — Sauvegarde automatique des brouillons
+// Sauvegarder le brouillon dans localStorage
+function saveDraft(projectId) {
+    const data = {
+        title: document.getElementById('taskTitle').value,
+        priority: document.getElementById('taskPriority').value
+    };
+    localStorage.setItem(`draft_${projectId}`, JSON.stringify(data));
+}
+
+// Restaurer le brouillon au chargement
+function restoreDraft(projectId) {
+    const draft = localStorage.getItem(`draft_${projectId}`);
+    if (!draft) return;
+
+    const data = JSON.parse(draft);
+    const restore = confirm('Un brouillon a été trouvé. Voulez-vous le restaurer ?');
+
+    if (restore) {
+        if (data.title) document.getElementById('taskTitle').value = data.title;
+        if (data.priority) document.getElementById('taskPriority').value = data.priority;
+    } else {
+        localStorage.removeItem(`draft_${projectId}`);
+    }
+}
+
+// Supprimer le brouillon après soumission réussie
+function deleteDraft(projectId) {
+    localStorage.removeItem(`draft_${projectId}`);
+}
+
+// Initialiser la sauvegarde automatique sur chaque champ
+function initDraftAutoSave(projectId) {
+    const fields = ['taskTitle', 'taskPriority'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', () => saveDraft(projectId));
+        }
+    });
+}
+
+
+// Lancement automatique au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    fetchTasks();
+
+    if (PROJECT_ID) {
+        // Restaurer le brouillon si existant
+        restoreDraft(PROJECT_ID);
+
+        // Initialiser la sauvegarde automatique
+        initDraftAutoSave(PROJECT_ID);
+    }
+});
