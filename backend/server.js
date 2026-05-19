@@ -32,15 +32,9 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', require('./routes/notifications'));
 ;
 
-// Test Route
 app.get('/', (req, res) => {
-
-  res.json({
-    message: 'TaskFlow API fonctionne ✅'
-  });
-
+  res.redirect('/register.html')
 });
-
 
 // Protected Route
 app.get('/api/protected', authMiddleware, (req, res) => {
