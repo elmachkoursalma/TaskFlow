@@ -225,9 +225,9 @@ textarea {
 }
 
 .project-card button:first-of-type {
-    background-color: #f5f0e6;
-    color: #6b5b3e;
-    border: 1px solid #8a7d4f;
+    background-color: #8a7d4f;
+    color: #fffaf2;
+    border: none;
 }
 
 .project-card button:first-of-type:hover {
