@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Project = require('../models/Project'); 
+const Notification = require('../models/Notification');
 const authMiddleware = require('../middleware/authMiddleware');
 const { logActivity } = require('../controllers/activityController');
 
@@ -31,6 +32,11 @@ router.post('/:projectId/invite', authMiddleware, async (req, res) => {
     // Ajouter le membre
     project.members.push(user._id);
     await project.save();
+    await Notification.create({
+      type: 'membre_ajoute',
+      message: `Vous avez été ajouté au projet "${project.title}"`,
+      user: user._id 
+    });
     await logActivity('member_added', project._id, req.user.id, { memberEmail: email });
     res.json({ message: `${user.fullName} a été invité avec succès` });
 

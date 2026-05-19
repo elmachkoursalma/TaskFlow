@@ -17,11 +17,19 @@ async function loadProjects(page = 1) {
     container.innerHTML = '';
 
     data.forEach(project => {
+      let deadlineText = 'Pas de deadline';
+        if (project.deadline) {
+          const d = new Date(project.deadline);
+          if (!isNaN(d)) {
+            deadlineText = d.toLocaleDateString('fr-FR');
+          }
+        }
       container.innerHTML += `
         <div class="project-card">
           <h3>${project.title}</h3>
           <p>${project.description || ''}</p>
           <span class="status">${project.status}</span>
+          <p style="font-size: 13px; color: #8a7d6a; margin-bottom: 12px;">📅 ${deadline}</p>
           <button onclick="openEditModal(
             '${project._id}',
             '${project.title}',
@@ -30,6 +38,7 @@ async function loadProjects(page = 1) {
             '${project.status}'
           )">Modifier</button>
           <button class="btn-tasks" onclick="goToTasks('${project._id}')">Voir les tâches</button>
+          <button onclick="goToMembers('${project._id}')">Membres</button>
           <button onclick="deleteProject('${project._id}')">Supprimer</button>
         </div>
       `;
@@ -130,6 +139,8 @@ function renderPagination(currentPage, totalPages) {
 function goToTasks(projectId) {
   window.location.href =`tasks.html?projectId=${projectId}`;
 }
-
+function goToMembers(projectId) {
+  window.location.href = `membres.html?projectId=${projectId}`;
+}
 // Charger au démarrage
 loadProjects();

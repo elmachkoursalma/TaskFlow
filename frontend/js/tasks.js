@@ -13,7 +13,7 @@ if (AUTH_TOKEN) {
 
 // Recuperation dynamique de l'ID du projet depuis l'URL de la page
 const urlParams = new URLSearchParams(window.location.search);
-const PROJECT_ID = urlParams.get('id'); 
+const PROJECT_ID = urlParams.get('projectId'); 
 
 const tableBody = document.getElementById('taskTableBody');
 const taskForm = document.getElementById('taskForm');
@@ -68,6 +68,10 @@ function renderTasks(tasks) {
                     <option value="terminé" ${task.status === 'terminé' ? 'selected' : ''}>Terminé</option>
                 </select>
             </td>
+            <td>
+                <span style="color: #5c4033; font-size: 13px;">${task.assignedTo ? task.assignedTo.fullName : '—'}
+                </span>
+            </td>
             <td class="text-end px-4">
                 <button class="btn btn-sm btn-link p-0 border-0 fw-bold" style="color: #bd3a3a; text-decoration: none;" onclick="deleteTask('${task._id}')">Supprimer</button>
             </td>
@@ -96,7 +100,8 @@ taskForm.addEventListener('submit', async function(e) {
             description: titleInput.value, // Eviter l'erreur 400 Validation du backend
             priority: priorityInput.value,
             status: "à faire", 
-            project: PROJECT_ID
+            project: PROJECT_ID,
+            assignedTo: document.getElementById('taskAssignTo').value || undefined 
         });
 
         if (response.data.success) {
@@ -139,7 +144,34 @@ async function deleteTask(id) {
         console.error("Erreur lors de la suppression de la tache:", error);
     }
 }
+async function loadMembers() {
+    try {
+        const response = await axios.get(`${API_URL}/projects/${PROJECT_ID}/members`);
+        const members = response.data;
 
+        // Remplir le select du formulaire de création
+        const assignSelect = document.getElementById('taskAssignTo');
+        members.forEach(member => {
+            const option = document.createElement('option');
+            option.value = member._id;
+            option.textContent = member.fullName;
+            assignSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erreur chargement membres:', error);
+    }
+}
+// Assigner une tâche à un membre
+async function assignTask(taskId, userId) {
+    if (!userId) return;
+    try {
+        await axios.patch(`${API_URL}/tasks/${taskId}/assign`, { userId });
+        fetchTasks();
+    } catch (error) {
+        console.error('Erreur assignation:', error);
+    }
+}
 // FONCTIONNALITÉ 7 — Sauvegarde automatique des brouillons
 // Sauvegarder le brouillon dans localStorage
 function saveDraft(projectId) {
@@ -186,6 +218,7 @@ function initDraftAutoSave(projectId) {
 // Lancement automatique au chargement
 document.addEventListener('DOMContentLoaded', () => {
     fetchTasks();
+    loadMembers();
 
     if (PROJECT_ID) {
         // Restaurer le brouillon si existant

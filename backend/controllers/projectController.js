@@ -7,7 +7,12 @@ exports.getProjects = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-
+    const filter = {
+      $or: [
+        { owner: req.user.id },
+        { members: req.user.id }
+      ]
+    };
     const total = await Project.countDocuments({ owner: req.user.id });
     const projects = await Project.find({ owner: req.user.id })
       .skip(skip)
