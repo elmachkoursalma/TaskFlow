@@ -50,6 +50,9 @@
         .bg-badge-haute { background-color: #bd3a3a !important; color: white; }
         .bg-badge-moyenne { background-color: #d9a05b !important; color: white; }
         .bg-badge-basse { background-color: #8da383 !important; color: white; }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -77,8 +80,12 @@
                     <div class="col-md-4">
                         <label class="form-label small fw-bold" style="color: #5c4033;">Assigner à</label>
                         <select id="taskAssignTo" class="form-select theme-input">
-                            <option value="">moi-meme</option>
+                            <option value="" disabled selected hidden>membres</option>
                         </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold" style="color: #5c4033;">Date limite</label>
+                        <input type="date" id="taskDeadline" class="form-control theme-input">
                     </div>
                     <div class="col-md-2 mt-4 pt-2">
                         <button type="submit" class="btn theme-btn w-100 fw-bold py-2">Ajouter</button>
@@ -96,6 +103,7 @@
                             <th>Priorité</th>
                             <th>Statut</th>
                             <th>Assigné à</th>
+                            <th>Deadline</th>
                             <th class="text-end px-4">Actions</th>
                         </tr>
                     </thead>
@@ -111,6 +119,29 @@
             <ul id="activityList" style="list-style: none; padding: 0;">
                 <li>Chargement...</li>
             </ul>
+        </div>
+    </div>
+    <!-- MODAL MODIFICATION TÂCHE -->
+    <div id="editModal" class="hidden" style="position: fixed; inset: 0; background: rgba(92,64,51,0.5); display: flex; align-items: center; justify-content: center; z-index: 100;">
+        <div style="background: #fffaf2; border-radius: 15px; padding: 36px; width: 400px; border: 2px solid #8a7d4f;">
+            <h2 style="color: #5c4033; margin-bottom: 20px; text-align: center;">Modifier la tâche</h2>
+            <input type="hidden" id="editTaskId">
+            <div style="margin-bottom: 16px;">
+                <label style="color: #5c4033; font-weight: bold;">Titre</label>
+                <input type="text" id="editTaskTitle" class="form-control theme-input mt-1">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="color: #5c4033; font-weight: bold;">Priorité</label>
+                <select id="editTaskPriority" class="form-select theme-input mt-1">
+                    <option value="basse">Basse</option>
+                    <option value="moyenne">Moyenne</option>
+                    <option value="haute">Haute</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button class="btn theme-btn w-100" onclick="saveEditTask()">Sauvegarder</button>
+                <button class="btn w-100" style="background: #f5f0e6; color: #6b5b3e; border: 1px solid #8a7d4f;" onclick="closeEditTask()">Annuler</button>
+            </div>
         </div>
     </div>
 
