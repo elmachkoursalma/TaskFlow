@@ -17,20 +17,42 @@ async function loadProjects(page = 1) {
     container.innerHTML = '';
 
     data.forEach(project => {
+      let projectDeadline = 'Pas de deadline';
+        if (project.deadline) {
+          const d = new Date(project.deadline);
+          if (!isNaN(d)) {
+            projectDeadline = d.toLocaleDateString('fr-FR');
+          }
+        }
+              const currentUser = JSON.parse(localStorage.getItem('user'));
+      const isOwner = project.owner === currentUser.id;
+      const role = isOwner ? '👑 Propriétaire' : '👤 Membre';
+
       container.innerHTML += `
         <div class="project-card">
-          <h3>${project.title}</h3>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <h3>${project.title}</h3>
+            <span style="font-size: 12px; background-color: #6b5b3e; color: white; padding: 3px 10px; border-radius: 20px;">${role}</span>
+          </div>
           <p>${project.description || ''}</p>
           <span class="status">${project.status}</span>
-          <button onclick="openEditModal(
-            '${project._id}',
-            '${project.title}',
-            '${project.description || ''}',
-            '${project.deadline || ''}',
-            '${project.status}'
-          )">Modifier</button>
-          <button class="btn-tasks" onclick="goToTasks('${project._id}')">Voir les tâches</button>
-          <button onclick="deleteProject('${project._id}')">Supprimer</button>
+          <p style="font-size: 13px; color: #8a7d6a; margin-bottom: 12px;">📅 ${projectDeadline}</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
+            ${isOwner ? `
+              <button class="btn-tasks" onclick="openEditModal(
+                '${project._id}',
+                '${project.title}',
+                '${project.description || ''}',
+                '${project.deadline || ''}',
+                '${project.status}'
+              )">Modifier</button>
+            ` : ''}
+            <button class="btn-tasks" onclick="goToTasks('${project._id}')">Voir les tâches</button>
+            ${isOwner ? `
+              <button class="btn-tasks" onclick="goToMembers('${project._id}')">👥 Membres</button>
+              <button class="btn-delete" onclick="deleteProject('${project._id}')">Supprimer</button>
+            ` : ''}
+          </div>
         </div>
       `;
     });
@@ -130,6 +152,8 @@ function renderPagination(currentPage, totalPages) {
 function goToTasks(projectId) {
   window.location.href =`tasks.html?projectId=${projectId}`;
 }
-
+function goToMembers(projectId) {
+  window.location.href = `membres.html?projectId=${projectId}`;
+}
 // Charger au démarrage
 loadProjects();

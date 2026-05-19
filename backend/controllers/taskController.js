@@ -3,7 +3,9 @@ const { logActivity } = require('./activityController');
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
-    const task = await Task.create(req.body);
+    const task = await Task.create({
+      ...req.body,
+    });
     await logActivity('task_created', task.project, req.user.id, { taskTitle: task.title });
     res.status(201).json({ success: true, data: task });
   } catch (error) {
@@ -14,7 +16,7 @@ exports.createTask = async (req, res) => {
 exports.getProjectTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ project: req.params.projectId })
-      .populate('assignedTo', 'name email');
+      .populate('assignedTo', 'fullName email');
     res.status(200).json({ success: true, data: tasks });
   } catch (error) {
 

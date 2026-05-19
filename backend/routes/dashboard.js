@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const authMiddleware = require('../middleware/authMiddleware');
 //Quand le frontend appelle GET /api/dashboard, cette fonction s'exécute. Le authMiddleware vérifie d'abord que l'utilisateur est bien connecté
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = new mongoose.Types.ObjectId(req.user.id);
     const now = new Date();
 
     // 1. Compter les projets actifs
