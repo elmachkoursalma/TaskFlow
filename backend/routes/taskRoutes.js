@@ -3,6 +3,10 @@ const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/taskController');
 const authMiddleware = require('../middleware/authMiddleware');
+
+//protect all task route globally with authentification middleware
+router.use(authMiddleware);
+
 // Routes for task management
 router.post('/', authMiddleware, taskController.createTask);
 router.get('/project/:projectId', authMiddleware, taskController.getProjectTasks);
