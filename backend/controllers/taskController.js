@@ -1,74 +1,21 @@
 const Task = require('../models/Task');
-
+const { logActivity } = require('./activityController');
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
     const task = await Task.create(req.body);
+    await logActivity('task_created', task.project, req.user.id, { taskTitle: task.title });
     res.status(201).json({ success: true, data: task });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
-// Get all tasks
-exports.getTasks = async (req, res) => {
-
+// Get tasks for a specific project
+exports.getProjectTasks = async (req, res) => {
   try {
-
-    const {
-      status,
-      priority,
-      search,
-      page = 1,
-      limit = 5
-    } = req.query;
-
-    const query = {};
-
-    // Filter by status
-    if (status) {
-      query.status = status;
-    }
-
-    // Filter by priority
-    if (priority) {
-      query.priority = priority;
-    }
-
-    // Search by title
-    if (search) {
-      query.title = {
-        $regex: search,
-        $options: 'i'
-      };
-    }
-
-    const skip = (page - 1) * limit;
-
-    const tasks = await Task.find(query)
-
-      .populate('assignedTo', 'name email')
-
-      .skip(skip)
-
-      .limit(parseInt(limit));
-
-    const total = await Task.countDocuments(query);
-
-    res.status(200).json({
-
-      success: true,
-
-      total,
-
-      currentPage: parseInt(page),
-
-      totalPages: Math.ceil(total / limit),
-
-      data: tasks
-
-    });
-
+    const tasks = await Task.find({ project: req.params.projectId })
+      .populate('assignedTo', 'name email');
+    res.status(200).json({ success: true, data: tasks });
   } catch (error) {
 
     res.status(400).json({
@@ -79,5 +26,71 @@ exports.getTasks = async (req, res) => {
     });
 
   }
+};
+// Update task status
+exports.updateTaskStatus = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ success: false, message: 'Tâche introuvable' });
 
+    const oldStatus = task.status; 
+
+    task.status = req.body.status;
+    await task.save();
+
+    await logActivity('status_changed', task.project, req.user.id, {
+      taskTitle: task.title,
+      oldStatus,
+      newStatus: req.body.status
+    });
+    res.status(200).json({ success: true, data: task });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+// Update task details
+exports.updateTask = async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    res.status(200).json({ success: true, data: task });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+// Delete a task
+exports.deleteTask = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id); 
+    if (!task) return res.status(404).json({ success: false, message: 'Tâche introuvable' });
+
+    await logActivity('task_deleted', task.project, req.user.id, { taskTitle: task.title }); 
+    await task.deleteOne();
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+// Assign a task to a user
+exports.assignTask = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const task =await Task.findByIdAndUpdate(
+      req.params.id,
+      { assignedTo: userId },
+      { new: true, runValidators: true }
+    
+    ).populate('assignedTo', 'name email');
+
+    if (!task) {
+      return res.status(404).json({success: false, message: 'Task not found' });
+  }
+  res.status(200).json({ success: true,data: task });
+} catch (error) {
+  res.status(400).json({ success: false, message: error.message });
+}
 };

@@ -29,6 +29,7 @@ async function loadProjects(page = 1) {
             '${project.deadline || ''}',
             '${project.status}'
           )">Modifier</button>
+          <button class="btn-tasks" onclick="goToTasks('${project._id}')">Voir les tâches</button>
           <button onclick="deleteProject('${project._id}')">Supprimer</button>
         </div>
       `;
@@ -125,6 +126,9 @@ function renderPagination(currentPage, totalPages) {
       </button>
     `;
   }
+}
+function goToTasks(projectId) {
+  window.location.href =`tasks.html?projectId=${projectId}`;
 }
 
 // Charger au démarrage

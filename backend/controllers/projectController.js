@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const { logActivity } = require('./activityController');
 
 // GET — Liste paginée
 exports.getProjects = async (req, res) => {
@@ -55,6 +56,7 @@ exports.updateProject = async (req, res) => {
     project.status      = status      || project.status;
 
     await project.save();
+    await logActivity('project_updated', project._id, req.user.id);
     res.json(project);
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur', error: error.message });
