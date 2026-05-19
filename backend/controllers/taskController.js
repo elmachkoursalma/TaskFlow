@@ -5,7 +5,6 @@ exports.createTask = async (req, res) => {
   try {
     const task = await Task.create({
       ...req.body,
-       assignedTo: req.user.id
     });
     await logActivity('task_created', task.project, req.user.id, { taskTitle: task.title });
     res.status(201).json({ success: true, data: task });
