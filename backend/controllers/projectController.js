@@ -13,8 +13,8 @@ exports.getProjects = async (req, res) => {
         { members: req.user.id }
       ]
     };
-    const total = await Project.countDocuments({ owner: req.user.id });
-    const projects = await Project.find({ owner: req.user.id })
+    const total = await Project.countDocuments(filter);
+    const projects = await Project.find(filter)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
