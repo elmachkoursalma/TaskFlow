@@ -30,7 +30,23 @@ async function fetchTasks() {
     try {
         const response = await axios.get(`${API_URL}/tasks/project/${PROJECT_ID}`);
         if (response.data.success) {
-            renderTasks(response.data.data); // Appeler la fonction d'affichage
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            let tasks = response.data.data;
+
+            // Vérifier si l'utilisateur est propriétaire du projet
+            const projectResponse = await axios.get(`${API_URL}/projects`);
+            const project = projectResponse.data.data.find(p => p._id === PROJECT_ID);
+            const isOwner = project && project.owner === currentUser.id;
+
+            // Si membre → filtre seulement ses tâches
+            if (!isOwner) {
+                tasks = tasks.filter(task => 
+                    task.assignedTo && task.assignedTo._id === currentUser.id
+                );
+            }
+
+            renderTasks(tasks); // Appeler la fonction d'affichage
+            await loadMembers();
         }
     } catch (error) {
         console.error("Erreur lors du chargement des taches:", error);
@@ -68,11 +84,14 @@ function renderTasks(tasks) {
                     <option value="terminé" ${task.status === 'terminé' ? 'selected' : ''}>Terminé</option>
                 </select>
             </td>
+            <td style="font-size: 13px; color: #5c4033;">
+                ${task.assignedTo ? task.assignedTo.fullName : '—'}
+            </td>
             <td>
-                <span style="color: #5c4033; font-size: 13px;">${task.assignedTo ? task.assignedTo.fullName : '—'}
-                </span>
+                ${task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR') : '—'}
             </td>
             <td class="text-end px-4">
+                <button class="btn btn-sm theme-btn me-2" onclick="openEditTask('${task._id}', '${task.title}', '${task.priority}')">Modifier</button>
                 <button class="btn btn-sm btn-link p-0 border-0 fw-bold" style="color: #bd3a3a; text-decoration: none;" onclick="deleteTask('${task._id}')">Supprimer</button>
             </td>
         `;
@@ -101,6 +120,7 @@ taskForm.addEventListener('submit', async function(e) {
             priority: priorityInput.value,
             status: "à faire", 
             project: PROJECT_ID,
+            deadline: document.getElementById('taskDeadline').value || undefined,
             assignedTo: document.getElementById('taskAssignTo').value || undefined 
         });
 
@@ -108,6 +128,7 @@ taskForm.addEventListener('submit', async function(e) {
             fetchTasks(); // Actualiser le tableau sans recharger la page
             titleInput.value = ''; // Vider le champ de saisie
             priorityInput.value = 'moyenne'; // Reset de la priorite
+            document.getElementById('taskAssignTo').value = ''; 
             deleteDraft(PROJECT_ID);
         }
     } catch (error) {
@@ -151,11 +172,19 @@ async function loadMembers() {
 
         // Remplir le select du formulaire de création
         const assignSelect = document.getElementById('taskAssignTo');
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        const defaultOption = document.createElement('option');
+        defaultOption.value = currentUser.id;
+        defaultOption.textContent = `${currentUser.fullName} (moi)`;
+        assignSelect.appendChild(defaultOption);
+
         members.forEach(member => {
-            const option = document.createElement('option');
-            option.value = member._id;
-            option.textContent = member.fullName;
-            assignSelect.appendChild(option);
+            if (member._id !== currentUser.id) {
+                const option = document.createElement('option');
+                option.value = member._id;
+                option.textContent = member.fullName;
+                assignSelect.appendChild(option);
+            }
         });
 
     } catch (error) {
@@ -170,6 +199,31 @@ async function assignTask(taskId, userId) {
         fetchTasks();
     } catch (error) {
         console.error('Erreur assignation:', error);
+    }
+}
+
+function openEditTask(id, title, priority) {
+    document.getElementById('editTaskId').value = id;
+    document.getElementById('editTaskTitle').value = title;
+    document.getElementById('editTaskPriority').value = priority;
+    document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditTask() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+async function saveEditTask() {
+    const id = document.getElementById('editTaskId').value;
+    const title = document.getElementById('editTaskTitle').value;
+    const priority = document.getElementById('editTaskPriority').value;
+
+    try {
+        await axios.put(`${API_URL}/tasks/${id}`, { title, priority });
+        closeEditTask();
+        fetchTasks();
+    } catch (error) {
+        console.error('Erreur modification tâche:', error);
     }
 }
 // FONCTIONNALITÉ 7 — Sauvegarde automatique des brouillons
